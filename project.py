@@ -115,6 +115,7 @@ def train_model(X_train, y_train):
 
 def make_prediction(model, data, scaler=None):
     # Preprocess data if scaling is necessary
+    # it is not necessary
     if scaler:
         data = scaler.transform(data)
 
