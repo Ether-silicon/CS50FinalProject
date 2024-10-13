@@ -3,10 +3,12 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+import seaborn as sn
+import matplotlib.pyplot as plt
 
 def main():
     # Import data
-    file_path = "/workspaces/155424119/project/predictive_maintenance.csv"
+    file_path = "predictive_maintenance.csv"
     data = load_data(file_path)
 
     # clean data
@@ -32,6 +34,7 @@ def main():
     accuracy = accuracy_score(y_test, predictions)
     f1 = f1_score(y_test, predictions, average="weighted")  # Weighted average for multi-class problems
     cm = confusion_matrix(y_test, predictions)  # Confusion matrix calculation
+    
 
     # Print output
     print("Loaded Model:", model)
@@ -39,6 +42,12 @@ def main():
     print("Accuracy:", accuracy)
     print("F1-score:", f1)
     print("Confusion Matrix:\n", cm)
+    classes = ["Heat Dissipation Failure", "No failure", "Overstrain Failure", "Power Failure", "Tool Wear Failure"]
+    df_cm = pd.DataFrame(cm, index = classes, columns=classes)
+    plt.figure(figsize = (10,7))
+    cm_plot = sn.heatmap(df_cm, annot = True)
+    cm_plot.set_title("Confusion matrix")
+    plt.show()
 
 
 def load_data(data_path):
@@ -115,7 +124,6 @@ def train_model(X_train, y_train):
 
 def make_prediction(model, data, scaler=None):
     # Preprocess data if scaling is necessary
-    # it is not necessary
     if scaler:
         data = scaler.transform(data)
 
